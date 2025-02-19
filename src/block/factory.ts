@@ -1,5 +1,5 @@
 import { LeakyReLU, ReLU, Sigmoid, Tanh } from "./activation";
-import { Block, Linear, Conv2d, MaxPool2d, Flatten, Reshape, TransposeConv2d, BatchNorm2d, Dropout } from "./interface";
+import { Block, Linear, Conv2d, MaxPool2d, Flatten, Reshape, TransposeConv2d, BatchNorm2d, Dropout, Unflatten } from "./interface";
 
 export function factoryBlock(name : string, params : Record<string, number | number[]>) : Block {
     switch (name) {
@@ -11,6 +11,8 @@ export function factoryBlock(name : string, params : Record<string, number | num
             return new MaxPool2d(params["kernel_size"] as number, params["stride"] as number, params["padding"] as number);
         case "flatten":
             return new Flatten();
+        case "unflatten":
+            return new Unflatten(params["shape"] as number[]);
         case "transposeconv2d":
             return new TransposeConv2d(params["kernel_size"] as number, params["stride"] as number, params["padding"] as number);
         case "reshape":

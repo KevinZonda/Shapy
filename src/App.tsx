@@ -26,78 +26,81 @@ function App() {
 
   return (
     <div className="container">
-      <div className="editor-section">
-        <h2 style={{textAlign: "center", marginBottom: "1rem"}}>Neural Network Shape Visualizer</h2>
-        <div className="input-group">
-          <label>Architecture YAML:</label>
-          <textarea 
-            className="yaml-editor"
-            value={yamlString} 
-            onChange={(e) => setYamlString(e.target.value)}
-            placeholder="Enter your neural network configuration in YAML format..."
-          />
-        </div>
-        
-        <div className="input-group">
-          <label>Input Shape:</label>
-          <input 
-            type="text" 
-            className="shape-input"
-            value={inputShape.toString()} 
-            onChange={(e) => setInputShape(e.target.value.split(',').map(Number))}
-            placeholder="1,32,32,3"
-          />
+      <div className="content-wrapper" style={{ display: 'flex', gap: '2rem', padding: '2rem' }}>
+        <div className="left-column" style={{ flex: '1' }}>
+          <h2 style={{textAlign: "center", marginBottom: "1rem"}}>Neural Network Shape Visualizer</h2>
+          <div className="input-group">
+            <label>Architecture YAML:</label>
+            <textarea 
+              className="yaml-editor"
+              value={yamlString} 
+              onChange={(e) => setYamlString(e.target.value)}
+              placeholder="Enter your neural network configuration in YAML format..."
+            />
+          </div>
+          
+          <div className="input-group">
+            <label>Input Shape:</label>
+            <input 
+              type="text" 
+              className="shape-input"
+              value={inputShape.toString()} 
+              onChange={(e) => setInputShape(e.target.value.split(',').map(Number))}
+              placeholder="1,32,32,3"
+            />
+          </div>
+
+          <div className="button-group">
+            <button 
+              className="primary-button"
+              onClick={() => {
+                const blocks = YAMLParser.parseBlocks(yamlString);
+                setBlocks(blocks);
+              }}
+            >
+              Compile
+            </button>
+            <button 
+              className="primary-button"
+              onClick={() => {
+                const result = forward(blocks, inputShape);
+                setResult(result);
+              }}
+            >
+              Forward
+            </button>
+          </div>
         </div>
 
-        <div className="button-group">
-          <button 
-            className="primary-button"
-            onClick={() => {
-              const blocks = YAMLParser.parseBlocks(yamlString);
-              setBlocks(blocks);
-            }}
-          >
-            Compile
-          </button>
-          <button 
-            className="primary-button"
-            onClick={() => {
-              const result = forward(blocks, inputShape);
-              setResult(result);
-            }}
-          >
-            Forward
-          </button>
-        </div>
-      </div>
-
-      <div className="results-section">
-        <div className="blocks-display">
-          <h2>Network Architecture</h2>
-          {blocks.map((block, index) => (
-            <div key={index} className="block-item">
-              <span className="block-id">{block.id}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="forward-results">
-          <h2>Forward Pass Results</h2>
-          {result.map((pair, index) => (
-            <div key={index} className="result-item">
-              <div className="shape-flow">
-                <span className="shape">{pair.inputShape.toString()}</span>
-                <span className="arrow">→</span>
-                <span className="block-name">{pair.block.id}</span>
-                <span className="arrow">→</span>
-                <span className={`shape ${!pair.success ? 'error' : ''}`}>
-                  {pair.success ? pair.outputShape?.toString() : pair.error}
-                </span>
+        <div className="right-column" style={{ flex: '1' }}>
+          <div className="blocks-display">
+            <h2>Network Architecture</h2>
+            {blocks.map((block, index) => (
+              <div key={index} className="block-item">
+                <span className="block-id">{block.id}</span>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <div className="forward-results">
+            <h2>Forward Pass Results</h2>
+            {result.map((pair, index) => (
+              <div key={index} className="result-item">
+                <div className="shape-flow">
+                  <span className="shape">{pair.inputShape.toString()}</span>
+                  <span className="arrow">→</span>
+                  <span className="block-name">{pair.block.id}</span>
+                  <span className="arrow">→</span>
+                  <span className={`shape ${!pair.success ? 'error' : ''}`}>
+                    {pair.success ? pair.outputShape?.toString() : pair.error}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+
       <footer style={{
         textAlign: 'center',
         padding: '1rem',
