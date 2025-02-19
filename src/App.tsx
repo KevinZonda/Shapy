@@ -27,7 +27,7 @@ function App() {
   return (
     <div className="container">
       <div className="editor-section">
-        <h2 style={{textAlign: "center", marginBottom: "1rem"}}>Shapy - Neural Network Shape Visualizer</h2>
+        <h2 style={{textAlign: "center", marginBottom: "1rem"}}>Neural Network Shape Visualizer</h2>
         <div className="input-group">
           <label>Architecture YAML:</label>
           <textarea 
@@ -105,7 +105,7 @@ function App() {
         borderTop: '1px solid #eee',
         color: '#666'
       }}>
-        © {new Date().getFullYear()} KevinZonda Shapy - Neural Network Shape Visualizer. All rights reserved.
+        © {new Date().getFullYear()} KevinZonda Neural Network Shape Visualizer. All rights reserved.
       </footer>
     </div>
   )
